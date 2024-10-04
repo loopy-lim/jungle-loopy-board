@@ -5,7 +5,7 @@ export const DatabaseProviders = [
     provide: 'DATABASE_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'better-sqlite3',
+        type: 'sqlite',
         database: 'jungle-loopy-board.db',
         entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
