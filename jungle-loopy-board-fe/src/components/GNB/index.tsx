@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const GlobalNavBar = () => {
   return (
-    <nav className="flex justify-between px-8 pt-12">
-      <Link className="text-3xl font-light" to="/">
+    <nav className="flex justify-between px-8 pt-12 backdrop-blur-md">
+      <Link className="px-4 text-3xl font-light" to="/">
         Home
       </Link>
       <ul className="flex gap-3">
