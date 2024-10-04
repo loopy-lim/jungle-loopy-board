@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
-import { SignUpResponseDto } from 'src/auth/dto/auth.dto';
+import { SignUpResponseDto, UserMeRequestDto } from 'src/auth/dto/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -27,5 +27,13 @@ export class UsersService {
     user.name = name;
     user.password = password;
     return this.userRepository.save(user);
+  }
+
+  async getUser({ email }): Promise<UserMeRequestDto> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return new UserMeRequestDto({ ...user });
   }
 }
