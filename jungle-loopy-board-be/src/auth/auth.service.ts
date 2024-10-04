@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { AuthResponseDto, SignUpResponseDto } from './dto/auth.dto';
+import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,10 +18,10 @@ export class AuthService {
     }
     const isPasswordValid = await this.usersService.validatePassword(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid password');
     }
 
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.user_pk };
     return {
       access_token: this.jwtService.sign(payload),
     }
@@ -30,12 +30,30 @@ export class AuthService {
   async signUp({ email, password, name }: SignUpResponseDto) {
     const user = await this.usersService.findOne(email);
     if (user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User already exists');
     }
 
     const newUser = await this.usersService.createUser({ email, password, name });
     if (!newUser) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Failed to create user');
+    }
+    return true;
+  }
+
+  async deleteAccount({ email, password }: DeleteAccountResponseDto) {
+    const user = await this.usersService.findOne(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    const isDeleted = await this.usersService.deleteUser(user.user_pk);
+    if (!isDeleted) {
+      throw new UnauthorizedException('Failed to delete user');
     }
     return true;
   }

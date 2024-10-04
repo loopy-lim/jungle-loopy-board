@@ -28,4 +28,14 @@ export class UsersService {
     user.password = password;
     return this.userRepository.save(user);
   }
+
+  async deleteUser(user_pk: number): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { user_pk } });
+    if
+      (!user) {
+      return false;
+    }
+    await this.userRepository.remove(user);
+    return true;
+  }
 }

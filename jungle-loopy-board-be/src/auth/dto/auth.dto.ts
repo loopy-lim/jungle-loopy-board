@@ -9,3 +9,7 @@ export class SignUpResponseDto {
   readonly name: string;
 }
 
+export class DeleteAccountResponseDto {
+  readonly email: string;
+  readonly password: string;
+}
