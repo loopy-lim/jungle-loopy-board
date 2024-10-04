@@ -57,4 +57,20 @@ export class AuthService {
     }
     return true;
   }
+
+  async updateAccount({ email, password, name }: SignUpResponseDto) {
+    const user = await this.usersService.findOne(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    user.name = name;
+    await this.usersService.updateUser(user.user_pk, { email, password, name });
+    return true;
+  }
 }

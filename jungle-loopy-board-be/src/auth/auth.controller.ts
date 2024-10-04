@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './dto/auth.dto';
 import { Response } from 'express';
@@ -42,6 +42,17 @@ export class AuthController {
   async deleteAccount(@Res() response: Response, @Body() body: DeleteAccountResponseDto) {
     response.clearCookie('access_token');
     const is_success = await this.authService.deleteAccount(body);
+
+    if (!is_success) {
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+    return response.json({ message: 'success' });
+  }
+
+  @UseGuards(AuthGuard)
+  @Put()
+  async updateAccount(@Res() response: Response, @Body() body: SignUpResponseDto) {
+    const is_success = await this.authService.updateAccount(body);
 
     if (!is_success) {
       return response.status(401).json({ message: 'Unauthorized' });

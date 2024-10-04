@@ -38,4 +38,16 @@ export class UsersService {
     await this.userRepository.remove(user);
     return true;
   }
+
+  async updateUser(user_pk: number, { email, name, password }: SignUpResponseDto): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { user_pk } });
+    if (!user) {
+      return false;
+    }
+    user.email = email;
+    user.name = name;
+    user.password = password;
+    await this.userRepository.save(user);
+    return true;
+  }
 }
