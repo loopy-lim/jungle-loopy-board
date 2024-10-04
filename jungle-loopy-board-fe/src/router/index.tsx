@@ -1,4 +1,4 @@
-import HomePage from "@app/pages/home";
+import HomePage from "@/pages/home";
 import { createBrowserRouter } from "react-router-dom";
 
 type Paths = "/" | "/home";

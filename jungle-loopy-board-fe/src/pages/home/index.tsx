@@ -1,4 +1,4 @@
-import GlobalNavBar from "@app/components/GNB";
+import GlobalNavBar from "@/components/GNB";
 
 const HomePage = () => {
   return <GlobalNavBar />;
