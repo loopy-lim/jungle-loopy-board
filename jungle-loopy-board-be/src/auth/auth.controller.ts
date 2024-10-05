@@ -59,4 +59,15 @@ export class AuthController {
     }
     return response.json({ message: 'success' });
   }
+
+  @UseGuards(AuthGuard)
+  @Post('refresh')
+  async refresh(@Res() response: Response) {
+    const { access_token } = await this.authService.refresh();
+    if (!access_token) {
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+    response.cookie('access_token', access_token, { httpOnly: true });
+    return response.json({ message: 'success' });
+  }
 }

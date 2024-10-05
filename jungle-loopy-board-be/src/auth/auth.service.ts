@@ -21,9 +21,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    const payload = { email: user.email, sub: user.user_pk };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign({}),
     }
   }
 
@@ -72,5 +71,11 @@ export class AuthService {
     user.name = name;
     await this.usersService.updateUser(user.user_pk, { email, password, name });
     return true;
+  }
+
+  async refresh() {
+    return {
+      access_token: this.jwtService.sign({}),
+    }
   }
 }
