@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './dto/auth.dto';
+import { AuthResponseDto, DeleteAccountResponseDto, RefreshResponseDto, SignUpResponseDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,8 +21,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
 
+    const claim = {
+      email: user.email,
+      name: user.name,
+    }
+
     return {
-      access_token: this.jwtService.sign({}),
+      access_token: this.jwtService.sign(claim),
     }
   }
 
@@ -73,9 +78,9 @@ export class AuthService {
     return true;
   }
 
-  async refresh() {
+  async refresh({ email, name }: RefreshResponseDto) {
     return {
-      access_token: this.jwtService.sign({}),
+      access_token: this.jwtService.sign({ email, name }),
     }
   }
 }

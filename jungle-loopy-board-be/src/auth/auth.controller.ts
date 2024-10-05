@@ -63,7 +63,13 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('refresh')
   async refresh(@Res() response: Response) {
-    const { access_token } = await this.authService.refresh();
+    const { email, name } = response.user;
+    if (!email) {
+      response.clearCookie('access_token');
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const { access_token } = await this.authService.refresh({ email, name });
     if (!access_token) {
       return response.status(401).json({ message: 'Unauthorized' });
     }
