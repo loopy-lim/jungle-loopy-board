@@ -17,7 +17,7 @@ export class UsersService {
       .getOne();
   }
 
-  async validatePassword(password: string, userPassword: string): Promise<boolean> {
+  validatePassword(password: string, userPassword: string): boolean {
     return password === userPassword;
   }
 

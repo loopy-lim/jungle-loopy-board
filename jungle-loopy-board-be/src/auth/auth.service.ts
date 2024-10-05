@@ -16,7 +16,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException();
     }
-    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
+    const isPasswordValid = this.usersService.validatePassword(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
@@ -50,7 +50,7 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
+    const isPasswordValid = this.usersService.validatePassword(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
@@ -68,7 +68,7 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
+    const isPasswordValid = this.usersService.validatePassword(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
