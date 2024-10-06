@@ -31,5 +31,13 @@ export class PostsController {
   }
 
   @Put(':id')
-  updatePost() { }
+  @UseGuards(AuthGuard)
+  updatePost(@Res() res: Response, @Param('id') id: number, @Body() postCreateRequestDto: PostCreateRequestDto) {
+    const user_email = res.user.email;
+    const result = this.postService.updatePost(id, user_email, postCreateRequestDto);
+    if (!result) {
+      throw new HttpException('fail', 400);
+    }
+    return res.status(200).send({ message: 'success' });
+  }
 }

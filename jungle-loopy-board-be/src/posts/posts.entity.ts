@@ -1,5 +1,5 @@
 import { User } from "src/users/users.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Post {
@@ -15,12 +15,12 @@ export class Post {
   @ManyToOne(() => User, user => user.user_pk)
   user: User
 
-  @Column("datetime", { default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn()
   created_at: Date;
 
-  @Column("datetime", { default: () => "CURRENT_TIMESTAMP" })
+  @UpdateDateColumn()
   updated_at: Date;
 
-  @Column({ nullable: true })
+  @DeleteDateColumn()
   deleted_at: Date;
 }

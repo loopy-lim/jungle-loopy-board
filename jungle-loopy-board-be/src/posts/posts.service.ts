@@ -46,4 +46,20 @@ export class PostsService {
     console.log(newPost);
     return this.postRepository.save(newPost);
   }
+
+  async updatePost(post_pk: number, user_email, post: PostCreateRequestDto) {
+    const user = await this.userRepository.findOne({ where: { email: user_email } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const targetPost = await this.postRepository.findOne({ where: { post_pk, user } });
+    if (!targetPost) {
+      throw new NotFoundException('Post not found');
+    }
+
+    targetPost.title = post.title;
+    targetPost.content = post.content;
+    return this.postRepository.save(targetPost);
+  }
 }
