@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PageOptionsDto } from 'src/common/dtos/page.dto';
 import { PostCreateRequestDto } from './dtos/post.dto';
@@ -11,12 +11,20 @@ export class PostsController {
 
   @Get()
   async getAllPosts(@Query() pageOptionsDto: PageOptionsDto) {
-    return await this.postService.getPaginate(pageOptionsDto);
+    const result = await this.postService.getPaginate(pageOptionsDto);
+    if (!result) {
+      throw new HttpException('fail', 400);
+    }
+    return result;
   }
 
   @Get(':id')
   async getPost(@Param('id') id: number) {
-    return await this.postService.getPost(id);
+    const result = await this.postService.getPost(id);
+    if (!result) {
+      throw new HttpException('fail', 400);
+    }
+    return result;
   }
 
   @Post()
@@ -32,12 +40,27 @@ export class PostsController {
 
   @Put(':id')
   @UseGuards(AuthGuard)
-  updatePost(@Res() res: Response, @Param('id') id: number, @Body() postCreateRequestDto: PostCreateRequestDto) {
+  async updatePost(@Res() res: Response, @Param('id') id: number, @Body() postCreateRequestDto: PostCreateRequestDto) {
     const user_email = res.user.email;
-    const result = this.postService.updatePost(id, user_email, postCreateRequestDto);
+    const result = await this.postService.updatePost(id, user_email, postCreateRequestDto);
     if (!result) {
       throw new HttpException('fail', 400);
     }
+    return res.status(200).send({ message: 'success' });
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async deletePost(@Res() res: Response, @Param('id') id: number) {
+    const user_email = res.user.email;
+    const result = await this.postService.deletePost(id, user_email);
+    if (!result) {
+      throw new HttpException('fail', 400);
+    }
+    if (result.affected === 0) {
+      throw new HttpException('fail', 400);
+    }
+
     return res.status(200).send({ message: 'success' });
   }
 }

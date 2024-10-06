@@ -47,7 +47,7 @@ export class PostsService {
     return this.postRepository.save(newPost);
   }
 
-  async updatePost(post_pk: number, user_email, post: PostCreateRequestDto) {
+  async updatePost(post_pk: number, user_email: string, post: PostCreateRequestDto) {
     const user = await this.userRepository.findOne({ where: { email: user_email } });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -61,5 +61,19 @@ export class PostsService {
     targetPost.title = post.title;
     targetPost.content = post.content;
     return this.postRepository.save(targetPost);
+  }
+
+  async deletePost(post_pk: number, user_email: string) {
+    const user = await this.userRepository.findOne({ where: { email: user_email } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const targetPost = await this.postRepository.findOne({ where: { post_pk, user } });
+    if (!targetPost) {
+      throw new NotFoundException('Post not found');
+    }
+
+    return this.postRepository.softDelete({ post_pk: post_pk });
   }
 }
