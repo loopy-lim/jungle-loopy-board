@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PageOptionsDto } from 'src/common/dtos/page.dto';
 import { PostCreateRequestDto } from './dtos/post.dto';
@@ -10,20 +10,24 @@ export class PostsController {
   constructor(private readonly postService: PostsService) { }
 
   @Get()
-  getAllPosts(@Query('page') pageOptionsDto: PageOptionsDto) {
-    return this.postService.getPaginate(pageOptionsDto);
+  async getAllPosts(@Query() pageOptionsDto: PageOptionsDto) {
+    return await this.postService.getPaginate(pageOptionsDto);
   }
 
   @Get(':id')
-  getPost(@Param('id') id: number) {
-    return this.postService.getPost(id);
+  async getPost(@Param('id') id: number) {
+    return await this.postService.getPost(id);
   }
 
   @Post()
   @UseGuards(AuthGuard)
-  createPost(@Res() res: Response, @Body() postCreateREquestDto: PostCreateRequestDto) {
+  async createPost(@Res() res: Response, @Body() postCreateRequestDto: PostCreateRequestDto) {
     const user_email = res.user.email;
-    return this.postService.createPost(user_email, postCreateREquestDto);
+    const result = await this.postService.createPost(user_email, postCreateRequestDto);
+    if (!result) {
+      throw new HttpException('fail', 400);
+    }
+    return res.status(201).send({ message: 'success' });
   }
 
   @Put(':id')

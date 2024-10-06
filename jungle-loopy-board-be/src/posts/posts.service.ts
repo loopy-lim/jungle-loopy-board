@@ -43,6 +43,7 @@ export class PostsService {
     newPost.title = post.title;
     newPost.content = post.content;
     newPost.user = user;
+    console.log(newPost);
     return this.postRepository.save(newPost);
   }
 }

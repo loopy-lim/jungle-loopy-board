@@ -25,7 +25,7 @@ export class PageMetaDto {
     this.page = pageOptionsDto.page <= 0 ? this.page = 1 : pageOptionsDto.page;
     this.take = pageOptionsDto.take;
     this.total = total;
-    this.last_page = Math.ceil(this.total / this.take);
+    this.last_page = Math.ceil(this.total / this.take) || 1;
     this.hasPreviousPage = this.page > 1;
     this.hasNextPage = this.page < this.last_page;
   }
