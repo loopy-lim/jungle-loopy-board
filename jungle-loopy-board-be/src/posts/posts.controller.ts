@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PageOptionsDto } from 'src/common/dtos/page.dto';
-import { PostCreateRequestDto } from './dtos/post.dto';
+import { PostCreateRequestDto } from './post.dto';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 
