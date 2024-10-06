@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
@@ -10,29 +11,31 @@ import {
 import { Post } from "../posts.entity";
 import { User } from "src/users/users.entity";
 
-@Entity()
+@Entity({ name: 'comment' })
 export class Comment {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'comment_pk' })
   comment_pk: number;
 
-  @Column()
+  @Column({ name: 'content' })
   content: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'parent_comment_pk' })
   parent_comment_pk: number;
 
   @ManyToOne(() => Post, post => post.post_pk)
+  @JoinColumn({ name: 'post_pk' })
   post: Post
 
   @ManyToOne(() => User, user => user.user_pk)
+  @JoinColumn({ name: 'user_pk' })
   user: User
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updated_at: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ name: 'deleted_at' })
   deleted_at: Date;
 }

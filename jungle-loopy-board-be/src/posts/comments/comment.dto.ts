@@ -1,15 +1,18 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class CreateCommentResponseDto {
   @IsNumber()
+  @Type(() => Number)
   @IsNotEmpty()
-  readonly post_pk: number;
+  readonly post_id: number;
 
   @IsNotEmpty()
   readonly content: string;
 
   @IsNumber()
-  readonly parent_comment_pk?: number;
+  @IsOptional()
+  readonly parent_comment_id?: number;
 }
 export class UpdateCommentResponseDto {
   @IsNotEmpty()
@@ -17,5 +20,5 @@ export class UpdateCommentResponseDto {
 
   @IsNotEmpty()
   @IsNumber()
-  readonly comment_pk: number;
+  readonly comment_id: number;
 }

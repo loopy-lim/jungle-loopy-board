@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './dto/auth.dto';
+import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './auth.dto';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
 

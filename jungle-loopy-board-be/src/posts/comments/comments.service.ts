@@ -22,7 +22,7 @@ export class CommentsService {
       throw new UnauthorizedException('User not found');
     }
 
-    const post = await this.postRepository.findOne({ where: { post_pk: createCommentDto.post_pk } });
+    const post = await this.postRepository.findOne({ where: { post_pk: createCommentDto.post_id } });
     if (!post) {
       throw new NotFoundException('Post not found');
     }
@@ -32,23 +32,26 @@ export class CommentsService {
     comment.user = user;
     comment.post = post;
 
-    if (createCommentDto.parent_comment_pk) {
-      const parentComment = await this.commentRepository.findOne({ where: { comment_pk: createCommentDto.parent_comment_pk } });
+    if (createCommentDto.parent_comment_id) {
+      const parentComment = await this.commentRepository.findOne({ where: { comment_pk: createCommentDto.parent_comment_id } });
       if (!parentComment) {
         throw new NotFoundException('Parent comment not found');
       }
       comment.parent_comment_pk = parentComment.comment_pk;
     }
 
-    return this.commentRepository.save(comment);
+    return await this.commentRepository.save(comment);
   }
 
-  findAll() {
-    return `This action returns all comments`;
-  }
+  async findAll(post_pk: number) {
+    const post = await this.postRepository.findOne({ where: { post_pk } });
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+    return await this.commentRepository.createQueryBuilder('comment')
+      .where('comment.post_pk = :post_pk', { post_pk })
+      .getMany();
   }
 
   update(id: number, updateCommentDto: UpdateCommentResponseDto) {

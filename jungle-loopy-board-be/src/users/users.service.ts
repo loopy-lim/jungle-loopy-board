@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
-import { SignUpResponseDto } from 'src/auth/dto/auth.dto';
+import { SignUpResponseDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +13,7 @@ export class UsersService {
   async findOne(email: string): Promise<User | undefined> {
     return this.userRepository
       .createQueryBuilder("user")
+      .select(["user.user_pk", "user.email", "user.name", "user.password"])
       .where("user.email = :email", { email })
       .getOne();
   }

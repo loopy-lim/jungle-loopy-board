@@ -53,14 +53,15 @@ export class PostsService {
       throw new NotFoundException('User not found');
     }
 
-    const targetPost = await this.postRepository.findOne({ where: { post_pk, user } });
+    let targetPost = await this.postRepository.findOne({ where: { post_pk, user } });
     if (!targetPost) {
       throw new NotFoundException('Post not found');
     }
 
-    targetPost.title = post.title;
-    targetPost.content = post.content;
-    return this.postRepository.save(targetPost);
+    return await this.postRepository.update(
+      { post_pk, user },
+      { title: post.title, content: post.content }
+    );
   }
 
   async deletePost(post_pk: number, user_email: string) {
