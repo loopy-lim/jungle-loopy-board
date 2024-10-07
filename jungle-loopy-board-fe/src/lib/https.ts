@@ -1,3 +1,5 @@
+import { ResponseError } from "@/apis/dtos";
+
 const BASE_URL = import.meta.env.VITE_PUBLIC_API_URL || 'http://localhost:8080';
 
 const fetcher = async (url: string, req: RequestInit) => {
@@ -6,13 +8,20 @@ const fetcher = async (url: string, req: RequestInit) => {
   const response = await fetch(BASE_URL + '/api' + url, {
     ...req,
     headers,
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error('API Error');
+    throw new ResponseError(response);
   }
 
-  return await response.json();
+  const resData = await response.json();
+
+  if (resData.error) {
+    throw new Error(resData);
+  }
+
+  return resData;
 };
 
 

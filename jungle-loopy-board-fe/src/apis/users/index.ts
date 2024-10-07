@@ -12,17 +12,17 @@ import {
 } from "./dtos";
 
 export const postLogin = async (data: LoginRequestUserDto) => {
-  const response = await https.post('/auths/login', data);
+  const response = await https.post('/auth/signin', data);
   return new LoginResponseUserDto(response);
 }
 
 export const postSignup = async (data: SignupRequestUserDto) => {
-  const response = await https.post('/auths/signup', data);
+  const response = await https.post('/auth/signup', data);
   return new SignupResponseUserDto(response);
 }
 
 export const postLogout = async () => {
-  const response = await https.post('/auths/logout', {});
+  const response = await https.post('/auth/logout', {});
   return new LogoutResponseUserDto(response);
 }
 
@@ -32,16 +32,16 @@ export const getUserInfo = async () => {
 }
 
 export const deleteUser = async () => {
-  const response = await https.delete('/auths');
+  const response = await https.delete('/auth');
   return new DeleteUserResponseDto(response);
 }
 
 export const updateUser = async (data: UpdateUserRequestDto) => {
-  const resonse = await https.put('/auths', data);
+  const resonse = await https.put('/auth', data);
   return new UpdateUserResponseDto(resonse);
 }
 
 export const postRefreshToken = async () => {
-  const response = await https.post('/auths/refresh', {});
+  const response = await https.post('/auth/refresh', {});
   return new LoginResponseUserDto(response);
 }

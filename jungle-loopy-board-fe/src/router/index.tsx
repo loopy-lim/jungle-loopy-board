@@ -1,13 +1,23 @@
 import HomePage from "@/pages/home";
-import { createBrowserRouter } from "react-router-dom";
+import LoginPage from "@/pages/login";
+import { createBrowserRouter, RouteObject } from "react-router-dom";
 
-// export type RouterPaths = router
-
-const router = createBrowserRouter([
+const routes = [
   {
     path: "/",
     element: <HomePage />,
   },
-]);
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/logout",
+    element: <LoginPage />,
+  },
+] as const satisfies RouteObject[];
+
+export type Routes = (typeof routes)[number]["path"];
+const router = createBrowserRouter(routes);
 
 export default router;

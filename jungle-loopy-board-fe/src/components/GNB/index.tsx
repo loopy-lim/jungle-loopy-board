@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { RoutesLink } from "../Link";
 
 const GlobalNavBar = () => {
   return (
     <nav className="flex justify-between px-8 pt-12 backdrop-blur-md">
-      <Link className="px-4 text-3xl font-light" to="/">
+      <RoutesLink className="px-4 text-3xl font-light" to="/">
         Home
-      </Link>
+      </RoutesLink>
       <ul className="flex gap-3">
         <li>
-          <Button size="lg" variant="default">
-            회원가입
+          <Button size="lg" variant="default" asChild>
+            <RoutesLink to="/logout">회원가입</RoutesLink>
           </Button>
         </li>
         <li>
-          <Button size="lg" variant="secondary">
-            로그인
+          <Button size="lg" variant="secondary" asChild>
+            <RoutesLink to="/login">로그인</RoutesLink>
           </Button>
         </li>
       </ul>
