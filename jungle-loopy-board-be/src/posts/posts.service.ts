@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
 import { PageDto, PageMetaDto, PageOptionsDto } from 'src/common/dtos/page.dto';
-import { PostCreateRequestDto } from './post.dto';
+import { PostCreateRequestDto } from './posts.dto';
 import { User } from 'src/users/users.entity';
 
 @Injectable()

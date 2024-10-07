@@ -12,17 +12,17 @@ import {
 } from "./dtos";
 
 export const postLogin = async (data: LoginRequestUserDto) => {
-  const response = await https.post('/users/login', data);
+  const response = await https.post('/auths/login', data);
   return new LoginResponseUserDto(response);
 }
 
 export const postSignup = async (data: SignupRequestUserDto) => {
-  const response = await https.post('/users/signup', data);
+  const response = await https.post('/auths/signup', data);
   return new SignupResponseUserDto(response);
 }
 
 export const postLogout = async () => {
-  const response = await https.post('/users/logout', {});
+  const response = await https.post('/auths/logout', {});
   return new LogoutResponseUserDto(response);
 }
 
@@ -32,11 +32,16 @@ export const getUserInfo = async () => {
 }
 
 export const deleteUser = async () => {
-  const response = await https.delete('/users');
+  const response = await https.delete('/auths');
   return new DeleteUserResponseDto(response);
 }
 
 export const updateUser = async (data: UpdateUserRequestDto) => {
-  const resonse = await https.put('/users', data);
+  const resonse = await https.put('/auths', data);
   return new UpdateUserResponseDto(resonse);
+}
+
+export const postRefreshToken = async () => {
+  const response = await https.post('/auths/refresh', {});
+  return new LoginResponseUserDto(response);
 }

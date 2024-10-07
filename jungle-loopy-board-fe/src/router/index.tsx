@@ -1,18 +1,13 @@
 import HomePage from "@/pages/home";
 import { createBrowserRouter } from "react-router-dom";
 
-type Paths = "/" | "/home";
-
-export type RouterPaths = {
-  path: Paths;
-  element: JSX.Element;
-};
+// export type RouterPaths = router
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
   },
-] as RouterPaths[]);
+]);
 
 export default router;

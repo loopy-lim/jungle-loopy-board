@@ -4,7 +4,7 @@ import { CommentsController } from './comments.controller';
 import { commentProvider } from './comments.provider';
 import { DatabaseModule } from 'src/database/database.module';
 import { userProviders } from 'src/users/users.providers';
-import { postProviders } from '../post.provider';
+import { postProviders } from '../posts.provider';
 
 @Module({
   imports: [DatabaseModule],
