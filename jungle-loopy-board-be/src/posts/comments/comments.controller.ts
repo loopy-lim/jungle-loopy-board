@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Res,
+  UseGuards,
+  Put
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentResponseDto, UpdateCommentResponseDto } from './comment.dto';
 import { Response } from 'express';
@@ -28,9 +38,19 @@ export class CommentsController {
     return await this.commentsService.findAll(+postId);
   }
 
-  @Patch(':commentId')
-  update(@Param('commentId') commentId: string, @Body() updateCommentDto: UpdateCommentResponseDto) {
-    return this.commentsService.update(+commentId, updateCommentDto);
+  @Put(':commentId')
+  @UseGuards(AuthGuard)
+  async update(@Res() response: Response, @Param('commentId') commentId: string, @Body() updateCommentDto: UpdateCommentResponseDto) {
+    const user_email = response.user.email;
+    if (!user_email) {
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+    const result = await this.commentsService.update(+commentId, user_email, updateCommentDto);
+    if (!result) {
+      return response.status(400).json({ message: 'Bad Request' });
+    }
+
+    return response.status(200).json({ message: 'success' });
   }
 
   @Delete(':commentId')

@@ -17,8 +17,4 @@ export class CreateCommentResponseDto {
 export class UpdateCommentResponseDto {
   @IsNotEmpty()
   readonly content: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  readonly comment_id: number;
 }

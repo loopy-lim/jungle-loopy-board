@@ -54,8 +54,17 @@ export class CommentsService {
       .getMany();
   }
 
-  update(id: number, updateCommentDto: UpdateCommentResponseDto) {
-    return `This action updates a #${id} comment`;
+  async update(id: number, email: string, updateCommentDto: UpdateCommentResponseDto) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const comment = await this.commentRepository.findOne({ where: { comment_pk: id, user } });
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    return await this.commentRepository.update({ comment_pk: id }, updateCommentDto);
   }
 
   remove(id: number) {
