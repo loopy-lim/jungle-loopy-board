@@ -54,7 +54,16 @@ export class CommentsController {
   }
 
   @Delete(':commentId')
-  remove(@Param('commentId') commentId: string) {
-    return this.commentsService.remove(+commentId);
+  @UseGuards(AuthGuard)
+  async remove(@Res() response: Response, @Param('commentId') commentId: string) {
+    const user_email = response.user.email;
+    if (!user_email) {
+      return response.status(401).json({ message: 'Unauthorized' });
+    }
+    const result = await this.commentsService.remove(+commentId, user_email);
+    if (!result) {
+      return response.status(400).json({ message: 'Bad Request' });
+    }
+    return response.status(200).json({ message: 'success' });
   }
 }

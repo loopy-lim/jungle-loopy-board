@@ -67,7 +67,16 @@ export class CommentsService {
     return await this.commentRepository.update({ comment_pk: id }, updateCommentDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: number, email: string) {
+    const user = await this.userRepository.findOne({ where: { email } })
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const comment = await this.commentRepository.findOne({ where: { comment_pk: id, user } });
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    return await this.commentRepository.softDelete({ comment_pk: id });
   }
 }
