@@ -14,10 +14,12 @@ export class PostsService {
     private userRepository: Repository<User>,
   ) { }
   async getPaginate(pageOptionsDto: PageOptionsDto) {
-    const [posts, total] = await this.postRepository.findAndCount({
-      take: pageOptionsDto.take,
-      skip: pageOptionsDto.skip,
-    });
+    const [posts, total] = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .take(pageOptionsDto.take)
+      .skip(pageOptionsDto.skip)
+      .getManyAndCount();
 
     const pageMetaDto = new PageMetaDto({ pageOptionsDto, total });
     const last_page = pageMetaDto.last_page;

@@ -91,7 +91,6 @@ const Signup = () => {
               </FormItem>
             )}
           />
-
           <div className="h-4 text-red-600">{isError && errorMessage}</div>
           <div className="flex w-full [&>*]:flex-1">
             <Button variant="default" type="submit">
