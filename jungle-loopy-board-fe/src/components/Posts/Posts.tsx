@@ -1,4 +1,6 @@
 import { useGetAllPostsQuery } from "@/hooks/react-query/usePostQuery";
+import { generatePaginationIndexs } from "@/lib/generator";
+import { cn } from "@/lib/utils";
 import { Link, useSearchParams } from "react-router-dom";
 
 const Posts = () => {
@@ -6,37 +8,82 @@ const Posts = () => {
   const page = searchParams.get("page") || 1;
 
   const {
-    data: { posts },
+    data: { posts, meta },
   } = useGetAllPostsQuery({ page: +page, take: 10 });
 
   return (
-    <div className="m-auto max-w-[1200px] divide-y-2 p-12 text-blue-950">
-      <div className="flex items-center justify-between bg-blue-50 px-6 py-2 text-xl font-bold uppercase">
-        <div>title</div>
-        <div className="text-right text-base">
-          <div>writer</div>
-          <div>create date</div>
+    <div className="m-auto max-w-[1200px] p-12 text-blue-950">
+      <div className="divide-y-2">
+        <div className="flex items-center justify-between bg-blue-50 px-6 py-2 text-xl font-bold uppercase">
+          <div>title</div>
+          <div className="text-right text-base">
+            <div>writer</div>
+            <div>create date</div>
+          </div>
         </div>
+        {posts.map((post) => (
+          <Link
+            to={`/posts/${post.id}`}
+            key={post.id}
+            className="flex items-center justify-between px-6 py-4 hover:bg-slate-100"
+          >
+            <div className="text-2xl font-bold capitalize">{post.title}</div>
+            <div className="flex flex-col items-end gap-2">
+              <div>{post.user.name}</div>
+              <div>
+                {post.created_at.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-      {posts.map((post) => (
-        <Link
-          to={`/posts/${post.id}`}
-          key={post.id}
-          className="flex items-center justify-between px-6 py-4 hover:bg-slate-100"
-        >
-          <div className="text-2xl font-bold capitalize">{post.title}</div>
-          <div className="flex flex-col items-end gap-2">
-            <div>{post.user.name}</div>
-            <div>
-              {post.created_at.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+      <div className="float-right flex">
+        {generatePaginationIndexs(+page, meta.last_page).map((p) => (
+          <Link
+            key={p}
+            to={`/?${new URLSearchParams({ page: `${p}` }).toString()}`}
+            className="w-6 text-center"
+          >
+            <div
+              className={cn("text-xl", p === +page ? "black" : "text-gray-400")}
+            >
+              {p}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const PostsSkeleton = () => {
+  return (
+    <div className="m-auto max-w-[1200px] p-12 text-blue-950">
+      <div className="divide-y-2">
+        <div className="flex items-center justify-between bg-blue-50 px-6 py-2 text-xl font-bold uppercase">
+          <div>title</div>
+          <div className="text-right text-base">
+            <div>writer</div>
+            <div>create date</div>
+          </div>
+        </div>
+        {Array.from({ length: 10 }).map((_, idx) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between px-6 py-4 hover:bg-slate-100"
+          >
+            <div className="h-8 w-[30rem] animate-pulse rounded-full bg-slate-300 text-2xl font-bold capitalize"></div>
+            <div className="flex flex-col items-end gap-2">
+              <div className="h-4 w-[12rem] animate-pulse rounded-full bg-slate-300"></div>
+              <div className="h-4 w-[24rem] animate-pulse rounded-full bg-slate-300"></div>
             </div>
           </div>
-        </Link>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

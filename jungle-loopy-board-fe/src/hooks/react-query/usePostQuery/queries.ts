@@ -1,8 +1,8 @@
 
 const postQueryKeys = {
-  getAllPosts: () => ['posts'],
+  getAllPosts: (id: number) => ['posts', { id }],
   getPost: (id: number) => ['post', { id }],
-  createPost: () => ['posts'],
+  createPost: () => ['post'],
   updatePost: (id: number) => ['post', { id }],
   deletePost: (id: number) => ['post', { id }],
 }

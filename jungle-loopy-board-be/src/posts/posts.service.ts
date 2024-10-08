@@ -18,7 +18,7 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user')
       .take(pageOptionsDto.take)
-      .skip(pageOptionsDto.skip)
+      .skip((pageOptionsDto.page - 1) * pageOptionsDto.take)
       .getManyAndCount();
 
     const pageMetaDto = new PageMetaDto({ pageOptionsDto, total });

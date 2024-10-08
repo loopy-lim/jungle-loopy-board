@@ -7,7 +7,7 @@ const useGetAllPostsQuery = (getAllPostsRequestDto?: GetAllPostsRequestDto) => {
   getAllPostsRequestDto ||= new GetAllPostsRequestDto();
 
   return useSuspenseQuery({
-    queryKey: postQueryKeys.getAllPosts(),
+    queryKey: postQueryKeys.getAllPosts(getAllPostsRequestDto.page),
     queryFn: () => getAllPosts(getAllPostsRequestDto),
   });
 };
