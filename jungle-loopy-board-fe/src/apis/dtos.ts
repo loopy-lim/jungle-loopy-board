@@ -1,8 +1,12 @@
 export class ResponseError extends Error {
-  response: Response;
-  constructor(response: Response) {
-    super(response.statusText);
+  error: string;
+  message: string;
+  statusCode: number;
+  constructor(response: Record<string, any>) {
+    super(response.message);
     this.name = 'ResponseError';
-    this.response = response;
+    this.error = response.error;
+    this.message = response.message;
+    this.statusCode = response.statusCode;
   }
 }

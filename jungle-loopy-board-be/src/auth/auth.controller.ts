@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotImplementedException, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './auth.dto';
 import { Request, Response } from 'express';
@@ -35,11 +35,7 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() body: SignUpResponseDto, @Res() response: Response) {
-    const is_success = await this.authService.signUp(body);
-    if (!is_success) {
-      return response.status(401).json({ message: 'Unauthorized' });
-    }
-
+    await this.authService.signUp(body);
     return response.json({ message: 'success' });
   }
 

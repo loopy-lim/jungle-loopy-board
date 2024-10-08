@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  InternalServerErrorException,
+  UnauthorizedException
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { AuthResponseDto, DeleteAccountResponseDto, RefreshResponseDto, SignUpResponseDto } from './auth.dto';
@@ -44,12 +49,12 @@ export class AuthService {
   async signUp({ email, password, name }: SignUpResponseDto) {
     const user = await this.usersService.findOne(email);
     if (user) {
-      throw new UnauthorizedException('User already exists');
+      throw new ConflictException('이미 존재하는 이메일입니다.');
     }
 
     const newUser = await this.usersService.createUser({ email, password, name });
     if (!newUser) {
-      throw new UnauthorizedException('Failed to create user');
+      throw new InternalServerErrorException('Failed to create user');
     }
     return true;
   }
@@ -57,7 +62,7 @@ export class AuthService {
   async deleteAccount({ email, password }: DeleteAccountResponseDto) {
     const user = await this.usersService.findOne(email);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new ConflictException('User not found');
     }
 
     const isPasswordValid = this.usersService.validatePassword(password, user.password);
@@ -67,7 +72,7 @@ export class AuthService {
 
     const isDeleted = await this.usersService.deleteUser(user.user_pk);
     if (!isDeleted) {
-      throw new UnauthorizedException('Failed to delete user');
+      throw new InternalServerErrorException('Failed to delete user');
     }
     return true;
   }
@@ -75,7 +80,7 @@ export class AuthService {
   async updateAccount({ email, password, name }: SignUpResponseDto) {
     const user = await this.usersService.findOne(email);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new ConflictException('User not found');
     }
 
     const isPasswordValid = this.usersService.validatePassword(password, user.password);

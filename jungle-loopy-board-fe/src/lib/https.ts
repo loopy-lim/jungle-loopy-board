@@ -10,14 +10,9 @@ const fetcher = async (url: string, req: RequestInit) => {
     headers,
     credentials: 'include',
   });
-
-  if (!response.ok) {
-    throw new ResponseError(response);
-  }
-
   const resData = await response.json();
 
-  if (resData.error) {
+  if (!response.ok || resData.error) {
     throw new ResponseError(resData);
   }
 
