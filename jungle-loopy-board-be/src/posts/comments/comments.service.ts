@@ -33,7 +33,8 @@ export class CommentsService {
     comment.post = post;
 
     if (createCommentDto.parent_comment_id) {
-      const parentComment = await this.commentRepository.findOne({ where: { comment_pk: createCommentDto.parent_comment_id } });
+      const parentComment = await this.commentRepository
+        .findOne({ where: { comment_pk: createCommentDto.parent_comment_id } });
       if (!parentComment) {
         throw new NotFoundException('Parent comment not found');
       }
@@ -55,11 +56,12 @@ export class CommentsService {
   }
 
   async update(id: number, email: string, updateCommentDto: UpdateCommentResponseDto) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const comment = await this.commentRepository.findOne({ where: { comment_pk: id, user } });
+    const comment = await this.commentRepository.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .where('comment.comment_pk = :comment_pk', { comment_pk: id })
+      .andWhere('user.email = :email', { email })
+      .getOne();
+
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
@@ -68,11 +70,12 @@ export class CommentsService {
   }
 
   async remove(id: number, email: string) {
-    const user = await this.userRepository.findOne({ where: { email } })
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const comment = await this.commentRepository.findOne({ where: { comment_pk: id, user } });
+    const comment = await this.commentRepository.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .where('comment.comment_pk = :comment_pk', { comment_pk: id })
+      .andWhere('user.email = :email', { email })
+      .getOne();
+
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }

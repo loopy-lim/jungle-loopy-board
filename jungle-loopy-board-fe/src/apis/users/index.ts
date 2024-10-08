@@ -22,12 +22,12 @@ export const postSignup = async (data: SignupRequestUserDto) => {
 }
 
 export const postLogout = async () => {
-  const response = await https.post('/auth/logout', {});
+  const response = await https.post('/auth/signout', {});
   return new LogoutResponseUserDto(response);
 }
 
 export const getUserInfo = async () => {
-  const response = await https.get('/users');
+  const response = await https.get('/auth');
   return new UserInfoResponseDto(response);
 }
 

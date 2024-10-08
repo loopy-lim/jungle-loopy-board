@@ -2,11 +2,12 @@ import { getUserInfo } from "@/apis/users";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import userQueryKeys from "./queries";
 
-const useGetUserInfoQuery = () => {
+const useGetUserInfo = () => {
   return useSuspenseQuery({
     queryKey: userQueryKeys.userInfo,
     queryFn: getUserInfo,
+    retry: false,
   });
 };
 
-export default useGetUserInfoQuery;
+export default useGetUserInfo;

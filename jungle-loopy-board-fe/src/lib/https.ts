@@ -18,7 +18,7 @@ const fetcher = async (url: string, req: RequestInit) => {
   const resData = await response.json();
 
   if (resData.error) {
-    throw new Error(resData);
+    throw new ResponseError(resData);
   }
 
   return resData;

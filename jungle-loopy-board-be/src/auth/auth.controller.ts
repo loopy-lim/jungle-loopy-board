@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Post, Put, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, DeleteAccountResponseDto, SignUpResponseDto } from './auth.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
@@ -9,6 +9,19 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
   ) { }
+
+  @Get()
+  async getUser(@Req() request: Request) {
+    const token = request.cookies['access_token'];
+    if (!token) {
+      return {};
+    }
+    const { email, name } = await this.authService.getUser(token);
+    if (!email || !name) {
+      return {};
+    }
+    return { email, name };
+  }
 
   @Post('signin')
   async signIn(@Body() body: AuthResponseDto, @Res() response: Response) {
@@ -76,4 +89,6 @@ export class AuthController {
     response.cookie('access_token', access_token, { httpOnly: true });
     return response.json({ message: 'success' });
   }
+
+
 }

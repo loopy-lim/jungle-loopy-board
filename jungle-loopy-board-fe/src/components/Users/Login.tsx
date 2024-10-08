@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RoutesLink } from "@/components/Link";
 import { useLoginMutate } from "@/hooks/react-query/useUserQuery";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import userQueryKeys from "@/hooks/react-query/useUserQuery/queries";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -21,6 +23,7 @@ const formSchema = z.object({
 
 const Login = () => {
   const { mutate, isPending, isError } = useLoginMutate();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -32,7 +35,11 @@ const Login = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    mutate(values, { onSuccess: () => navigate("/") });
+    mutate(values, {
+      onSuccess: () => navigate("/"),
+      onSettled: () =>
+        queryClient.invalidateQueries({ queryKey: userQueryKeys.userInfo }),
+    });
   };
 
   return (
