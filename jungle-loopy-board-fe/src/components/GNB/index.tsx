@@ -23,7 +23,7 @@ const GlobalNavBar = () => {
   return (
     <nav className="flex justify-between px-8 pt-12 backdrop-blur-md">
       <RoutesLink className="px-4 text-3xl font-light" to="/">
-        Home
+        Jungle
       </RoutesLink>
       {userData?.name ? (
         <div className="flex items-baseline gap-2">
