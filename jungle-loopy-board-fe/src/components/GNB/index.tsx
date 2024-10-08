@@ -10,7 +10,7 @@ const GlobalNavBar = () => {
       <ul className="flex gap-3">
         <li>
           <Button size="lg" variant="default" asChild>
-            <RoutesLink to="/logout">회원가입</RoutesLink>
+            <RoutesLink to="/signup">회원가입</RoutesLink>
           </Button>
         </li>
         <li>

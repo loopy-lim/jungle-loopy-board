@@ -1,5 +1,6 @@
 import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
+import Signup from "@/pages/signup";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
 const routes = [
@@ -12,8 +13,8 @@ const routes = [
     element: <LoginPage />,
   },
   {
-    path: "/logout",
-    element: <LoginPage />,
+    path: "/signup",
+    element: <Signup />,
   },
 ] as const satisfies RouteObject[];
 

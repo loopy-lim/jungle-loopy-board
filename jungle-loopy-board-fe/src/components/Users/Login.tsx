@@ -36,50 +36,53 @@ const Login = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full max-w-72 flex-col items-center justify-center gap-3 p-4"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Email" />
-                </FormControl>
-              </FormLabel>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Password" type="password" />
-                </FormControl>
-              </FormLabel>
-            </FormItem>
-          )}
-        />
-        <div className="h-4 text-red-600">
-          {isError && "이메일이 없거나 비밀번호가 틀렸습니다."}
-        </div>
-        <div className="flex w-full gap-3 [&>*]:flex-1">
-          <Button variant="outline" type="button" asChild>
-            <RoutesLink to="/login">회원가입</RoutesLink>
-          </Button>
-          <Button disabled={isPending} type="submit">
-            로그인
-          </Button>
-        </div>
-      </form>
-    </Form>
+    <div className="flex h-full w-full min-w-[28rem] flex-col items-center justify-center rounded-lg bg-white p-8">
+      <h1 className="text-3xl font-bold">LOGIN</h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex w-full max-w-96 flex-col justify-center gap-3 p-4"
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Email" />
+                  </FormControl>
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Password" type="password" />
+                  </FormControl>
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+          <div className="h-4 text-red-600">
+            {isError && "이메일이 없거나 비밀번호가 틀렸습니다."}
+          </div>
+          <div className="flex w-full gap-3 [&>*]:flex-1">
+            <Button variant="default" type="button" asChild>
+              <RoutesLink to="/signup">회원가입</RoutesLink>
+            </Button>
+            <Button variant="secondary" disabled={isPending} type="submit">
+              로그인
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
 
