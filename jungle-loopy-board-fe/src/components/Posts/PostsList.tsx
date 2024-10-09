@@ -1,7 +1,10 @@
 import { useGetAllPostsQuery } from "@/hooks/react-query/usePostQuery";
+import { unixtimeConvertorToKorean } from "@/lib/convertor";
 import { generatePaginationIndexs } from "@/lib/generator";
 import { cn } from "@/lib/utils";
 import { Link, useSearchParams } from "react-router-dom";
+
+const currentTime = new Date().getTime();
 
 const PostsList = () => {
   const [searchParams, _] = useSearchParams();
@@ -30,12 +33,19 @@ const PostsList = () => {
             <div className="text-2xl font-bold capitalize">{post.title}</div>
             <div className="flex flex-col items-end gap-2">
               <div>{post.user.name}</div>
-              <div>
+              <div className="flex gap-2">
                 {post.created_at.toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
+                <span>
+                  (
+                  {unixtimeConvertorToKorean(
+                    currentTime - post.created_at.getTime(),
+                  )}
+                  )
+                </span>
               </div>
             </div>
           </Link>

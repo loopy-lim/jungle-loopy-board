@@ -1,6 +1,7 @@
 import { CommentsList } from "@/components/Comments";
 import BlockNote from "@/components/common/BlockNote";
 import ErrorBoundary from "@/components/common/ErrorBundray";
+import PostUpdate from "@/components/Posts/PostUpdate";
 import { Button } from "@/components/ui/button";
 import {
   useDeletePostMutate,
@@ -10,7 +11,7 @@ import postQueryKeys from "@/hooks/react-query/usePostQuery/queries";
 import { useRandomImageQuery } from "@/hooks/react-query/useRandomImageQuery";
 import { useGetUserInfoQuery } from "@/hooks/react-query/useUserQuery";
 import { useQueryClient } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { Suspense, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface PostProps {
@@ -22,6 +23,7 @@ const Post = ({ id }: PostProps) => {
   const { data: user } = useGetUserInfoQuery();
   const { data: randomImage } = useRandomImageQuery();
   const { mutate: deletePost } = useDeletePostMutate({ id });
+  const [isEditing, toggleEditing] = useReducer((state) => !state, false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -38,6 +40,10 @@ const Post = ({ id }: PostProps) => {
         alert("삭제에 실패했습니다.");
       },
     });
+
+  const afterUpdate = () => {
+    toggleEditing();
+  };
 
   return (
     <div className="relative">
@@ -70,10 +76,21 @@ const Post = ({ id }: PostProps) => {
               <Button variant="destructive" onClick={onDelete}>
                 삭제
               </Button>
-              <Button variant="secondary">수정</Button>
+              <Button variant="secondary" onClick={toggleEditing}>
+                {isEditing ? "취소" : "수정"}
+              </Button>
             </div>
           )}
-          <BlockNote contents={post.content} />
+          {isEditing ? (
+            <PostUpdate
+              initialContent={post.content}
+              postId={id}
+              initialTitle={post.title}
+              afterUpdate={afterUpdate}
+            />
+          ) : (
+            <BlockNote contents={post.content} />
+          )}
           <ErrorBoundary>
             <Suspense>
               <CommentsList postId={id} />
