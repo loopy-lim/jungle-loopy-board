@@ -1,4 +1,7 @@
+import { RoutesLink } from "@/components/Link";
+import { Button } from "@/components/ui/button";
 import { useGetAllPostsQuery } from "@/hooks/react-query/usePostQuery";
+import { useGetUserInfoQuery } from "@/hooks/react-query/useUserQuery";
 import { unixtimeConvertorToKorean } from "@/lib/convertor";
 import { generatePaginationIndexs } from "@/lib/generator";
 import { cn } from "@/lib/utils";
@@ -13,9 +16,17 @@ const PostsList = () => {
   const {
     data: { posts, meta },
   } = useGetAllPostsQuery({ page: +page, take: 10 });
+  const { data: user } = useGetUserInfoQuery();
 
   return (
     <div className="m-auto max-w-[1200px] p-12 text-blue-950">
+      <div className="flex justify-end py-2">
+        {!!user && !!user.email && (
+          <Button asChild>
+            <RoutesLink to="/posts/create">New Post</RoutesLink>
+          </Button>
+        )}
+      </div>
       <div className="divide-y-2">
         <div className="flex items-center justify-between bg-blue-50 px-6 py-2 text-xl font-bold uppercase">
           <div>title</div>

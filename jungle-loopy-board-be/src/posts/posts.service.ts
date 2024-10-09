@@ -19,6 +19,7 @@ export class PostsService {
       .leftJoinAndSelect('post.user', 'user')
       .take(pageOptionsDto.take)
       .skip((pageOptionsDto.page - 1) * pageOptionsDto.take)
+      .orderBy('post.created_at', 'DESC')
       .getManyAndCount();
 
     const pageMetaDto = new PageMetaDto({ pageOptionsDto, total });

@@ -1,6 +1,7 @@
 import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
 import PostsPage from "@/pages/posts";
+import PostCreatePage from "@/pages/posts/create";
 import SignupPage from "@/pages/signup";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
@@ -16,6 +17,10 @@ const routes = [
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/posts/create",
+    element: <PostCreatePage />,
   },
   {
     path: "/posts/:id",
