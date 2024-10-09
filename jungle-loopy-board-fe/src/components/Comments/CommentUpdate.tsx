@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   commentQueryKeys,
-  useCreateCommentMutate,
+  useUpdateCommentMutate,
 } from "@/hooks/react-query/useCommentQuery";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
@@ -10,23 +10,42 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
-interface CommentTextareaProps {
+interface CommentUpdateProps {
   postId: number;
+  initialContent: string;
+  commentId: number;
+  afterUpdate?: () => void;
 }
 
-const CommentTextarea = ({ postId }: CommentTextareaProps) => {
+const CommentUpdate = ({
+  commentId,
+  initialContent,
+  postId,
+  afterUpdate,
+}: CommentUpdateProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useCreateBlockNote({
     animations: false,
   });
-  const { mutate: createComment } = useCreateCommentMutate(postId);
+
+  const { mutate: updateComment } = useUpdateCommentMutate(postId);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (initialContent) {
+      const loadInitialHTML = async () => {
+        const blocks = await editor.tryParseMarkdownToBlocks(initialContent);
+        editor.replaceBlocks(editor.document, blocks);
+      };
+      loadInitialHTML();
+    }
+  }, [editor, initialContent]);
 
   useEffect(() => {
     const submitEvent = (e: KeyboardEvent) => {
       if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        onCreateComment();
+        onEditComment();
       }
     };
     if (ref.current) {
@@ -40,23 +59,24 @@ const CommentTextarea = ({ postId }: CommentTextareaProps) => {
     };
   }, [ref]);
 
-  const onCreateComment = async () => {
+  const onEditComment = async () => {
     const content = await editor.blocksToMarkdownLossy();
     if (!content) {
       return;
     }
 
-    createComment(
-      { content },
+    updateComment(
+      { commentId, putUpdateCommentResponseDto: { content } },
       {
         onSuccess: () => {
           editor.forEachBlock((block) => {
             editor.removeBlocks([block.id]);
             return true;
           });
+          afterUpdate?.();
         },
         onError: () => {
-          alert("댓글 작성에 실패했습니다.");
+          alert("댓글 수정에 실패했습니다.");
         },
         onSettled: () => {
           queryClient.invalidateQueries({
@@ -69,17 +89,14 @@ const CommentTextarea = ({ postId }: CommentTextareaProps) => {
 
   return (
     <>
-      <div className="rounded-md border">
-        <div className="bg-slate-100 px-6 py-4 text-xl">Add Comment</div>
-        <div className="py-4" ref={ref}>
-          <BlockNoteView editor={editor} />
-        </div>
+      <div className="py-4" ref={ref}>
+        <BlockNoteView editor={editor} />
       </div>
-      <div className="mt-4 flex justify-end">
-        <Button onClick={onCreateComment}>Add Comment</Button>
+      <div className="mt-4 flex justify-end pb-12 pr-4">
+        <Button onClick={onEditComment}>Update Comment</Button>
       </div>
     </>
   );
 };
 
-export default CommentTextarea;
+export default CommentUpdate;

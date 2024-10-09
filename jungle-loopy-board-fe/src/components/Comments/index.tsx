@@ -1,4 +1,6 @@
 import CommentsList from "@/components/Comments/CommentsList";
-import CommentTextarea from "@/components/Comments/CommentTextarea";
+import CommentCreate from "@/components/Comments/CommentCreate";
+import CommentUpdate from "@/components/Comments/CommentUpdate";
+import Comment from "@/components/Comments/Comment";
 
-export { CommentsList, CommentTextarea };
+export { CommentsList, CommentCreate, CommentUpdate, Comment };

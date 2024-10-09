@@ -1,5 +1,6 @@
 
 const postQueryKeys = {
+  appPosts: () => ['posts'],
   getAllPosts: (id: number) => ['posts', { id }],
   getPost: (id: number) => ['post', { id }],
   createPost: () => ['post'],

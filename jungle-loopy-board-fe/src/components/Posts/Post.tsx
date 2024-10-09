@@ -1,8 +1,17 @@
 import { CommentsList } from "@/components/Comments";
+import BlockNote from "@/components/common/BlockNote";
 import ErrorBoundary from "@/components/common/ErrorBundray";
-import { useGetPostQuery } from "@/hooks/react-query/usePostQuery";
+import { Button } from "@/components/ui/button";
+import {
+  useDeletePostMutate,
+  useGetPostQuery,
+} from "@/hooks/react-query/usePostQuery";
+import postQueryKeys from "@/hooks/react-query/usePostQuery/queries";
 import { useRandomImageQuery } from "@/hooks/react-query/useRandomImageQuery";
+import { useGetUserInfoQuery } from "@/hooks/react-query/useUserQuery";
+import { useQueryClient } from "@tanstack/react-query";
 import { Suspense } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface PostProps {
   id: number;
@@ -10,7 +19,25 @@ interface PostProps {
 
 const Post = ({ id }: PostProps) => {
   const { data: post } = useGetPostQuery({ id });
+  const { data: user } = useGetUserInfoQuery();
   const { data: randomImage } = useRandomImageQuery();
+  const { mutate: deletePost } = useDeletePostMutate({ id });
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const onDelete = () =>
+    deletePost(void 0, {
+      onSuccess: () => {
+        alert("삭제되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: postQueryKeys.appPosts(),
+        });
+        navigate("/");
+      },
+      onError: () => {
+        alert("삭제에 실패했습니다.");
+      },
+    });
 
   return (
     <div className="relative">
@@ -38,7 +65,15 @@ const Post = ({ id }: PostProps) => {
       <div className="min-h-screen bg-white">
         <div className="h-24"></div>
         <div className="m-auto max-w-[1200px]">
-          <div>{post.content}</div>
+          {user.email === post.user.email && (
+            <div className="flex justify-end gap-3">
+              <Button variant="destructive" onClick={onDelete}>
+                삭제
+              </Button>
+              <Button variant="secondary">수정</Button>
+            </div>
+          )}
+          <BlockNote contents={post.content} />
           <ErrorBoundary>
             <Suspense>
               <CommentsList postId={id} />

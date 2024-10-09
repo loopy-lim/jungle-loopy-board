@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 const useDeletePostMutate = ({ id }: { id: number }) => {
   return useMutation({
     mutationKey: postQueryKeys.deletePost(id),
-    mutationFn: deletePost,
+    mutationFn: () => deletePost({ id }),
   });
 };
 
