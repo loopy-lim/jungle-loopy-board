@@ -1,5 +1,6 @@
 import { CommentCreate, Comment } from "@/components/Comments";
 import { useGetAllCommentsQuery } from "@/hooks/react-query/useCommentQuery";
+import { useGetUserInfoQuery } from "@/hooks/react-query/useUserQuery";
 
 interface CommentsListProps {
   postId: number;
@@ -7,6 +8,7 @@ interface CommentsListProps {
 
 const CommentsList = ({ postId }: CommentsListProps) => {
   const { data: comments } = useGetAllCommentsQuery({ postId });
+  const { data: user } = useGetUserInfoQuery();
 
   return (
     <>
@@ -16,7 +18,7 @@ const CommentsList = ({ postId }: CommentsListProps) => {
           <Comment key={comment.comment_pk} comment={comment} postId={postId} />
         ))}
       </ul>
-      <CommentCreate postId={postId} />
+      {!!user && !!user.email && <CommentCreate postId={postId} />}
     </>
   );
 };
