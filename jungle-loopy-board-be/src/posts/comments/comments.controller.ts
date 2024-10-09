@@ -20,12 +20,12 @@ export class CommentsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Res() response: Response, @Param('commentId') commentId: string, @Body() createCommentDto: CreateCommentResponseDto) {
+  create(@Res() response: Response, @Param('postId') postId: string, @Body() createCommentDto: CreateCommentResponseDto) {
     const user_email = response.user.email;
     if (!user_email) {
       return response.status(401).json({ message: 'Unauthorized' });
     }
-    const comments = this.commentsService.create(user_email, commentId, createCommentDto);
+    const comments = this.commentsService.create(user_email, postId, createCommentDto);
     if (!comments) {
       return response.status(400).json({ message: 'Bad Request' });
     }

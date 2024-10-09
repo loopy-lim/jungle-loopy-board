@@ -1,8 +1,8 @@
-import { Comment, PostCreateCommentResponseDto, PutUpdateCommentRequestDto, PutUpdateCommentResponseDto, } from "@/apis/comments/dtos";
+import { Comment, PostCreateCommentRequestDto, PostCreateCommentResponseDto, PutUpdateCommentRequestDto, PutUpdateCommentResponseDto, } from "@/apis/comments/dtos";
 import { https } from "@/lib/https";
 
-export const postCreateComment = async (postId: number, postCreateCommentResponseDto: PostCreateCommentResponseDto) => {
-  const response = await https.post(`/posts/${postId}/comments`, postCreateCommentResponseDto);
+export const postCreateComment = async (postId: number, postCreateCommentRequestDto: PostCreateCommentRequestDto) => {
+  const response = await https.post(`/posts/${postId}/comments`, postCreateCommentRequestDto);
   return new PostCreateCommentResponseDto(response);
 }
 

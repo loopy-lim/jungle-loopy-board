@@ -1,12 +1,10 @@
-const SECOND = 1000 * 10000;
+const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const MONTH = DAY * 30;
 
-export const unixtimeConvertorToKorean = (millisecond: number) => {
-  const currentTime = new Date().getTime();
-  const diff = currentTime - millisecond;
+export const unixtimeConvertorToKorean = (diff: number) => {
 
   if (diff < MINUTE) {
     return "방금 전";

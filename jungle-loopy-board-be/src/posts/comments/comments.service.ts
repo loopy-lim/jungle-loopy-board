@@ -17,9 +17,10 @@ export class CommentsService {
   ) { }
 
   async create(email: string, post_pk: string, createCommentDto: CreateCommentResponseDto) {
-    if (post_pk && isNaN(+post_pk)) {
+    if (!post_pk && isNaN(+post_pk) && +post_pk < 1) {
       throw new NotFoundException('Post not found');
     }
+
     const user = await this.userRepository.findOne({ where: { email } })
     if (!user) {
       throw new UnauthorizedException('User not found');
