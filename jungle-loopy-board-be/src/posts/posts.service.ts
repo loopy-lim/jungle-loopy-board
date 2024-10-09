@@ -32,7 +32,17 @@ export class PostsService {
   }
 
   async getPost(post_pk: number) {
-    return this.postRepository.findOne({ where: { post_pk } });
+    const post = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.user', 'user')
+      .where('post.post_pk = :post_pk', { post_pk })
+      .getOne();
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    return post;
   }
 
   async createPost(email: string, post: PostCreateRequestDto) {

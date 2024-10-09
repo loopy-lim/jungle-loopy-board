@@ -1,5 +1,6 @@
 import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
+import PostsPage from "@/pages/posts";
 import SignupPage from "@/pages/signup";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
@@ -15,6 +16,10 @@ const routes = [
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/posts/:id",
+    element: <PostsPage />,
   },
 ] as const satisfies RouteObject[];
 

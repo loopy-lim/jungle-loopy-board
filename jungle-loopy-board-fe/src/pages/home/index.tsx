@@ -1,8 +1,8 @@
 import ErrorBoundary from "@/components/common/ErrorBundray";
 import GlobalNavBar from "@/components/GNB";
 import { Introdunction } from "@/components/Intro";
-import { Posts } from "@/components/Posts";
-import { PostsSkeleton } from "@/components/Posts/posts";
+import { PostsList } from "@/components/Posts";
+import { PostsSkeleton } from "@/components/Posts/PostsList";
 import { Suspense } from "react";
 
 const HomePage = () => {
@@ -14,7 +14,7 @@ const HomePage = () => {
         </Suspense>
         <Introdunction />
         <Suspense fallback={<PostsSkeleton />}>
-          <Posts />
+          <PostsList />
         </Suspense>
       </ErrorBoundary>
     </>

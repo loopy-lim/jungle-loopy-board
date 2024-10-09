@@ -20,7 +20,7 @@ export const getAllPosts = async ({ page, take }: GetAllPostsRequestDto) => {
 }
 
 export const getPost = async ({ id }: GetPostRequestDto) => {
-  const response = await https.get(`/ posts / ${id} `);
+  const response = await https.get(`/posts/${id}`);
   return new GetPostResponseDto(response);
 }
 

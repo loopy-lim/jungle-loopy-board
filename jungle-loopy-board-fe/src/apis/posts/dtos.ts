@@ -12,8 +12,8 @@ export class Post {
     this.id = id;
     this.title = title;
     this.content = content;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
+    this.created_at = new Date(created_at);
+    this.updated_at = new Date(updated_at);
     this.user = user;
   }
 }
@@ -56,10 +56,9 @@ export class GetPostRequestDto {
   }
 }
 
-export class GetPostResponseDto {
-  post: Post;
-  constructor({ post }: GetPostResponseDto) {
-    this.post = post;
+export class GetPostResponseDto extends Post {
+  constructor(post: GetPostResponseDto) {
+    super(post);
   }
 }
 

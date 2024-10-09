@@ -1,3 +1,3 @@
-import Posts from "@/components/Posts/posts";
+import PostsList from "@/components/Posts/PostsList";
 
-export { Posts };
+export { PostsList };

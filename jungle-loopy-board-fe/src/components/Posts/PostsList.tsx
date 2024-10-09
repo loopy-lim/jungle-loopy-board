@@ -3,7 +3,7 @@ import { generatePaginationIndexs } from "@/lib/generator";
 import { cn } from "@/lib/utils";
 import { Link, useSearchParams } from "react-router-dom";
 
-const Posts = () => {
+const PostsList = () => {
   const [searchParams, _] = useSearchParams();
   const page = searchParams.get("page") || 1;
 
@@ -88,4 +88,4 @@ export const PostsSkeleton = () => {
   );
 };
 
-export default Posts;
+export default PostsList;
