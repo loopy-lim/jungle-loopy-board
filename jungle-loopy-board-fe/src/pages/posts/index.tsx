@@ -1,6 +1,6 @@
 import ErrorBoundary from "@/components/common/ErrorBundray";
 import GlobalNavBar from "@/components/GNB";
-import Post from "@/components/Posts/Post";
+import { Post } from "@/components/Posts";
 import { Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 

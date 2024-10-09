@@ -1,5 +1,8 @@
+import { CommentsList } from "@/components/Comments";
+import ErrorBoundary from "@/components/common/ErrorBundray";
 import { useGetPostQuery } from "@/hooks/react-query/usePostQuery";
 import { useRandomImageQuery } from "@/hooks/react-query/useRandomImageQuery";
+import { Suspense } from "react";
 
 interface PostProps {
   id: number;
@@ -34,7 +37,14 @@ const Post = ({ id }: PostProps) => {
       <div className="h-screen"></div>
       <div className="min-h-screen bg-white">
         <div className="h-24"></div>
-        {post.content}
+        <div className="m-auto max-w-[1200px]">
+          <div>{post.content}</div>
+          <ErrorBoundary>
+            <Suspense>
+              <CommentsList postId={id} />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </div>
     </div>
   );

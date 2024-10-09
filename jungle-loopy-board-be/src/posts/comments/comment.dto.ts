@@ -2,11 +2,6 @@ import { Type } from "class-transformer";
 import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class CreateCommentResponseDto {
-  @IsNumber()
-  @Type(() => Number)
-  @IsNotEmpty()
-  readonly post_id: number;
-
   @IsNotEmpty()
   readonly content: string;
 

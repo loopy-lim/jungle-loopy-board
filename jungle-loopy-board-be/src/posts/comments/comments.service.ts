@@ -16,13 +16,16 @@ export class CommentsService {
     private postRepository: Repository<Post>,
   ) { }
 
-  async create(email: string, createCommentDto: CreateCommentResponseDto) {
+  async create(email: string, post_pk: string, createCommentDto: CreateCommentResponseDto) {
+    if (post_pk && isNaN(+post_pk)) {
+      throw new NotFoundException('Post not found');
+    }
     const user = await this.userRepository.findOne({ where: { email } })
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    const post = await this.postRepository.findOne({ where: { post_pk: createCommentDto.post_id } });
+    const post = await this.postRepository.findOne({ where: { post_pk: +post_pk } });
     if (!post) {
       throw new NotFoundException('Post not found');
     }
@@ -51,7 +54,9 @@ export class CommentsService {
     }
 
     return await this.commentRepository.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
       .where('comment.post_pk = :post_pk', { post_pk })
+      .orderBy('comment.created_at', 'ASC')
       .getMany();
   }
 
